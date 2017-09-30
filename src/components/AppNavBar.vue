@@ -1,36 +1,35 @@
 <template lang="pug">
 .AppNavBar
   nav.navbar.navbar-default
-    .container-fluid
-      .navbar-header
-        button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar1')
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        a.navbar-brand(href='/')
-          span.active.brandTitle Lunch ?
-      #navbar1.navbar-collapse.collapse
-        ul.nav.navbar-nav
-          li
-            a(href='#') Let's Slot
-          li
-            a(href='#') Feedback
-          li
-            a(href='#') New Menu
-          li.dropdown
-            a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
-              | Login
-              span.caret
-            ul.dropdown-menu(role='menu')
-              li
-                a(href='#') Action
-              li
-                a(href='#') Another
-              li
-                a(href='#') Something
-              li.divider
-              li
-                a(href='#') Separated link
+    .navbar-header
+      button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar1')
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      a.navbar-brand(href='/')
+        span.active.brandTitle Lunch ?
+    #navbar1.navbar-collapse.collapse
+      ul.nav.navbar-nav
+        li
+          a(href='#') Let's Slot
+        li
+          a(href='#') Feedback
+        li
+          a(href='#') New Menu
+        li.dropdown
+          a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
+            | Login
+            span.caret
+          ul.dropdown-menu(role='menu')
+            li
+              a(href='#') Action
+            li
+              a(href='#') Another
+            li
+              a(href='#') Something
+            li.divider
+            li
+              a(href='#') Separated link
 </template>
 
 <script>
@@ -46,6 +45,7 @@ export default {
   right: 0px
   font-size: 26px
   text-align: left
+  z-index: 100
 
 nav
   box-shadow: 0px 0px 5px rgba(#000, 0.2)

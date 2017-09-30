@@ -1,13 +1,15 @@
 <template lang="pug">
   .Homepage
     AppNavBar
+    FoodPicker
 </template>
 
 <script>
 import AppNavBar from './AppNavBar'
+import FoodPicker from './FoodPicker'
 
 export default {
-  components: { AppNavBar }
+  components: { AppNavBar, FoodPicker }
 }
 </script>
 
@@ -15,5 +17,6 @@ export default {
 .Homepage
   position: relative
   font-size: 24px
-  height: 1000px
+  // height: 1000px
+  width: 100vw
 </style>
