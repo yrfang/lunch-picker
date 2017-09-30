@@ -1,7 +1,7 @@
 <template lang="pug">
   .FoodPicker
     .row
-      h3.sectionTitle Food Slot machine
+      h3.sectionTitle What to eat ?
     .row
       .form-group#budgetSelect
         label(for='budget') 💰 預算範圍
@@ -21,36 +21,80 @@
         .innerContainer
           .foodResult
             ul
-              li Food1
-              li food2
+              li 今天吃啥？
           .slotButton
             .slotTop
             .slotBody
-    .row
-      button.btn.btn-secondary.slotSubmit(type='button') Let's Slot !
+      .buttons
+        button(@click="clickStart", v-if="randomShow===false") Start
+        button(@click="clickStop", v-if="randomShow") stop
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      areas: ['全部','萬華區','中正區','大同區','中山區','大安區','南港區','文山區','松山區','信義區','士林區','北投區','內湖區','在家裡','在捷運上','在圖書館','在計程車上','在馬路上','在廁所','在辦公室','在家裡'],
+      randomShow: false,
+      timerId: ''
+    }
+  },
+  mounted() {
+    // this.clickStart();
+  },
+  computed: {
+    randomResult() {
+      const random = this.areas[Math.floor(Math.random() * this.areas.length)];
+      return this.areas;
+    },
+  },
+  methods: {
+    clickStart() {
+      const foodList = document.querySelector('.foodResult ul li');
+      const randomFood = this.areas[Math.floor(Math.random() *
+      this.areas.length)];
+      this.randomShow = true;
+      this.timerId = setInterval(this.interValFunc, 100);
+    },
+    interValFunc() {
+      const foodList = document.querySelector('.foodResult ul li');
+      const randomFood = this.areas[Math.floor(Math.random() *
+      this.areas.length)];
+      if(!this.randomShow) {
+        clearInterval(this.timerId);
+      }
+      foodList.innerHTML = randomFood;
+    },
+    clickStop() {
+      const foodList = document.querySelector('.foodResult ul li');
+      this.randomShow = false;
+    },
+  }
 }
 </script>
 
 <style lang="sass" scoped>
 .FoodPicker
-  position: fixed
-  top: 60px
-  left: 0px
-  right: 0px
-  bottom: 0px
-  padding-left: 60px
+  // position: fixed
+  // top: 60px
+  // left: 0px
+  // right: 0px
+  // bottom: 0px
+  width: 100vw
+  height: 150vh
+  padding-left: 100px
+  padding-right: 100px
+  margin-top: 50px
   overflow-x: hidden
   overflow-y: scroll
   z-index: 0
+  text-align: center
 
 .sectionTitle
   margin-bottom: 30px
   font-weight: bold
   color: #507bb4
+  font-size: 30px
 
 #budgetSelect
   width: 200px
@@ -61,6 +105,7 @@ export default {
     border: solid 1px
     margin-top: 30px
     width: 50%
+    min-width: 300px
     height: 150px
     position: relative
     border-radius: 10px
@@ -125,17 +170,12 @@ export default {
           border-radius: 50%
           z-index: 10
 
-.slotSubmit
-  margin-top: 40px
-  cursor: pointer
-  padding: 15px 25px
-  font-size: 24px
-
 @media only screen and (max-width: 480px)
   .FoodPicker
     // text-align: center
   .slotMachine.outerContainer
-    width: 70%
+    width: 90%
+    min-width: initial
     height: 100px
     .innerContainer
       .foodResult
@@ -145,8 +185,4 @@ export default {
       .slotButton
         .slotBody
           height: 60px
-
-  .slotSubmit
-    padding: 10px 15px
-    font-size: 18px
 </style>
