@@ -1,7 +1,6 @@
 <template lang="pug">
   .Homepage
-    .container
-      AppNavBar
+    AppNavBar
 </template>
 
 <script>
@@ -13,4 +12,8 @@ export default {
 </script>
 
 <style lang="sass">
+.Homepage
+  position: relative
+  font-size: 24px
+  height: 1000px
 </style>
