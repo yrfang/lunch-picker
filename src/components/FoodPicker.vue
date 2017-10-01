@@ -6,16 +6,14 @@
       .form-group#budgetSelect
         label(for='budget') 💰 預算範圍
         select.form-control
-          option 0 ~ 100
-          option 100 ~ 150
-          option 150 ~ 200
-          option 200 up
+          option(v-for="budget in budgets",
+                 v-bind:value="budget.value") {{ budget.text }}
     .row
       .form-group#budgetSelect
         label(for='budget') 😋 種類
         select.form-control
-          option 正餐
-          option 飲料
+          option(v-for="category in categories",
+                 v-bind:value="category.value") {{ category.text }}
     .row
       .slotMachine.outerContainer
         .innerContainer
@@ -25,18 +23,30 @@
           .slotButton
             .slotTop
             .slotBody
-      .buttons
-        button(@click="clickStart", v-if="randomShow===false") Start
-        button(@click="clickStop", v-if="randomShow") stop
+      .slotButton
+        button.start(@click="clickStart", v-if="randomShow===false") STAR
+        button.stop(@click="clickStop", v-if="randomShow") STOP
 </template>
 
 <script>
 export default {
   data() {
     return {
-      areas: ['全部','萬華區','中正區','大同區','中山區','大安區','南港區','文山區','松山區','信義區','士林區','北投區','內湖區','在家裡','在捷運上','在圖書館','在計程車上','在馬路上','在廁所','在辦公室','在家裡'],
+      selectedBudget: '0 ~ 100',
+      budgets: [
+        { text: "0 ~ 100", value: 0},
+        { text: "100 ~ 150", value: 100},
+        { text: "150 ~ 200", value: 150},
+        { text: "200 up", value: 200},
+      ],
+      selectedCategory: '0 ~ 100',
+      categories: [
+        { text: "正餐", value: 'meal'},
+        { text: "飲料", value: 'drink'},
+      ],
+      lists: ['全部','萬華區','中正區','大同區','中山區','大安區','南港區','文山區','松山區','信義區','士林區','北投區','內湖區','在家裡','在捷運上','在圖書館','在計程車上','在馬路上','在廁所','在辦公室','在家裡'],
       randomShow: false,
-      timerId: ''
+      timerId: '',
     }
   },
   mounted() {
@@ -44,22 +54,22 @@ export default {
   },
   computed: {
     randomResult() {
-      const random = this.areas[Math.floor(Math.random() * this.areas.length)];
-      return this.areas;
+      const random = this.lists[Math.floor(Math.random() * this.lists.length)];
+      return this.lists;
     },
   },
   methods: {
     clickStart() {
       const foodList = document.querySelector('.foodResult ul li');
-      const randomFood = this.areas[Math.floor(Math.random() *
-      this.areas.length)];
+      const randomFood = this.lists[Math.floor(Math.random() *
+      this.lists.length)];
       this.randomShow = true;
       this.timerId = setInterval(this.interValFunc, 100);
     },
     interValFunc() {
       const foodList = document.querySelector('.foodResult ul li');
-      const randomFood = this.areas[Math.floor(Math.random() *
-      this.areas.length)];
+      const randomFood = this.lists[Math.floor(Math.random() *
+      this.lists.length)];
       if(!this.randomShow) {
         clearInterval(this.timerId);
       }
@@ -75,18 +85,10 @@ export default {
 
 <style lang="sass" scoped>
 .FoodPicker
-  // position: fixed
-  // top: 60px
-  // left: 0px
-  // right: 0px
-  // bottom: 0px
-  width: 100vw
+  position: relative
   height: 150vh
-  padding-left: 100px
-  padding-right: 100px
-  margin-top: 50px
+  margin-top: 60px
   overflow-x: hidden
-  overflow-y: scroll
   z-index: 0
   text-align: center
 
@@ -94,20 +96,26 @@ export default {
   margin-bottom: 30px
   font-weight: bold
   color: #507bb4
-  font-size: 30px
+  font-size: 36px
 
-#budgetSelect
+.form-group#budgetSelect
   width: 200px
+  position: relative
+  margin-left: auto
+  margin-right: auto
   select
     font-size: 16px
 
 .slotMachine.outerContainer
-    border: solid 1px
-    margin-top: 30px
-    width: 50%
-    min-width: 300px
-    height: 150px
     position: relative
+    margin-top: 30px
+    margin-left: auto
+    margin-right: auto
+    width: 70%
+    min-width: 300px
+    max-width: 600px
+    height: 150px
+    border: solid 1px
     border-radius: 10px
     box-shadow: 0 2px 10px rgba(#000, 0.4)
     background: linear-gradient(to bottom, #666, #444)
@@ -144,35 +152,39 @@ export default {
           li
             margin-bottom: 50px
 
-      .slotButton
-        position: absolute
-        top: -40px
-        right: -52px
-        width: 40px
-        cursor: pointer
-        .slotBody
-          position: absolute
-          left: 5px
-          top: 20px
-          background-color: #8e8a8a
-          width: 20px
-          height: 100px
-          border-radius: 5px
-          z-index: 1
-        .slotTop
-          background: linear-gradient(to right, #507bb4 0%, #245eab 30%, #507bb4 100%)
-          box-shadow: 0px 0px 2px rgba(#fff, 0.3)
-          position: absolute
-          top: 0px
-          left: 0px
-          width: 30px
-          height: 30px
-          border-radius: 50%
-          z-index: 10
+.slotButton
+  text-align: center
+  margin-top: 40px
+  button
+    font-weight: 800
+    letter-spacing: 1px
+    color: #fff
+    padding: 10px 40px
+    border: solid 2px #333
+    border-radius: 50px
+    // box-shadow: 5px 5px 0px yellow, 3px 3px 10px blue
+
+    &:focus
+      outline: none
+
+    &.start
+      background-color: green
+
+    &.stop
+      background-color: red
 
 @media only screen and (max-width: 480px)
   .FoodPicker
-    // text-align: center
+    text-align: center
+    margin-top: 30px
+
+  .sectionTitle
+    font-size: 32px
+
+  .form-group#budgetSelect
+    label
+      font-size: 24px
+
   .slotMachine.outerContainer
     width: 90%
     min-width: initial
@@ -181,8 +193,9 @@ export default {
       .foodResult
         top: 10px
         bottom: 10px
-        font-size: 24px
-      .slotButton
-        .slotBody
-          height: 60px
+        font-size: 18px
+  .slotButton
+    margin-top: 20px
+    button
+      font-size: 18px
 </style>

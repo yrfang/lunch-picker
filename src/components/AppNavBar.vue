@@ -7,15 +7,15 @@
         span.icon-bar
         span.icon-bar
       a.navbar-brand(href='/')
-        span.active.brandTitle Lunch ?
+        span.active.brandTitle Let's Lunch
     #navbar1.navbar-collapse.collapse
       ul.nav.navbar-nav
         li
-          a(href='#') Let's Slot
+          a(href='/about') About
         li
-          a(href='#') Feedback
+          a(href='/feedback') Feedback
         li
-          a(href='#') New Menu
+          a(href='/store') What's New
         li.dropdown
           a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
             | Login

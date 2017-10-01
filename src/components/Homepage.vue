@@ -17,6 +17,5 @@ export default {
 .Homepage
   position: relative
   font-size: 24px
-  // height: 1000px
-  width: 100vw
+  letter-spacing: 1px
 </style>
