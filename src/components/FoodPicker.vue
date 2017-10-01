@@ -5,9 +5,10 @@
     .row
       .form-group#budgetSelect
         label(for='budget') 💰 預算範圍
-        select.form-control
+        select.form-control(v-model="selectBudgeItem")
           option(v-for="budget in budgets",
-                 v-bind:value="budget.value") {{ budget.text }}
+                 v-bind:value="budget",
+                 ) {{ budget.text }}
     .row
       .form-group#budgetSelect
         label(for='budget') 😋 種類
@@ -29,47 +30,96 @@
 </template>
 
 <script>
+import Firebase from 'firebase'
+//import toastr from 'toastr'
+
+let config = {
+  apiKey: "AIzaSyBEYcYW4zbye38aFfiRYiC25hKyp9-4WNc",
+  authDomain: "whattoeat-f36a5.firebaseapp.com",
+  databaseURL: "https://whattoeat-f36a5.firebaseio.com",
+  projectId: "whattoeat-f36a5",
+  storageBucket: "whattoeat-f36a5.appspot.com",
+  messagingSenderId: "229539569797"
+};
+let app = Firebase.initializeApp(config);
+//let authRef = Firebase.auth();
+//authRef.onAuthStateChanged(onAuthStateChanged);
+let db = app.database();
+
+Firebase.auth().onAuthStateChanged((user) => {
+  if(user) {
+    console.log("auth changed");
+    //this.$router.push('/')
+  } else {
+    //this.$router.push('/')
+  }
+});
+
+let storesRef = db.ref('stores');
+
 export default {
+  firebase: {
+    stores: storesRef,
+  },
+
+
+
   data() {
+      var _budgets = [
+        { text: "0 ~ 100", low: 0, high: 100},
+        { text: "100 ~ 150", low: 100, high: 150},
+        { text: "150 ~ 200", low: 150, high: 200},
+        { text: "200 up", low: 200, high: 1000},
+      ];
+      
     return {
-      selectedBudget: '0 ~ 100',
-      budgets: [
-        { text: "0 ~ 100", value: 0},
-        { text: "100 ~ 150", value: 100},
-        { text: "150 ~ 200", value: 150},
-        { text: "200 up", value: 200},
-      ],
-      selectedCategory: '0 ~ 100',
+      budgets: _budgets,
       categories: [
         { text: "正餐", value: 'meal'},
         { text: "飲料", value: 'drink'},
       ],
-      lists: ['全部','萬華區','中正區','大同區','中山區','大安區','南港區','文山區','松山區','信義區','士林區','北投區','內湖區','在家裡','在捷運上','在圖書館','在計程車上','在馬路上','在廁所','在辦公室','在家裡'],
+      stores: this.getInitStoreData(),
       randomShow: false,
       timerId: '',
+      selectBudgeItem: _budgets[0]
+    }
+  },
+
+  computed: {
+    // a computed getter
+    filteredStores: function() {
+      return this.stores.filter(this.filterStore);
     }
   },
   mounted() {
+    console.log(this.selectBudgeItem);
+    //computed
     // this.clickStart();
   },
-  computed: {
-    randomResult() {
-      const random = this.lists[Math.floor(Math.random() * this.lists.length)];
-      return this.lists;
-    },
-  },
+  //computed: {
+    //randomResult() {
+      //const random = this.lists[Math.floor(Math.random() * this.lists.length)];
+     //return this.lists;
+    //},
+  //},
   methods: {
+    filterStore(store) {
+        return store.price >= this.selectBudgeItem.low &&
+          store.price <= this.selectBudgeItem.high;
+    },
     clickStart() {
+
+      console.log(this.filteredStores);
       const foodList = document.querySelector('.foodResult ul li');
-      const randomFood = this.lists[Math.floor(Math.random() *
-      this.lists.length)];
+      const randomFood = this.filteredStores[Math.floor(Math.random() *
+      this.filteredStores.length)];
       this.randomShow = true;
       this.timerId = setInterval(this.interValFunc, 100);
     },
     interValFunc() {
       const foodList = document.querySelector('.foodResult ul li');
-      const randomFood = this.lists[Math.floor(Math.random() *
-      this.lists.length)];
+      const randomFood = this.filteredStores[Math.floor(Math.random() *
+      this.filteredStores.length)].name;
       if(!this.randomShow) {
         clearInterval(this.timerId);
       }
@@ -78,6 +128,17 @@ export default {
     clickStop() {
       const foodList = document.querySelector('.foodResult ul li');
       this.randomShow = false;
+    },
+    getInitStoreData() {
+
+      let items = [];
+      storesRef.once('value', function(snap) {
+        snap.forEach(function(storeSnap) {
+          
+          items.push(storeSnap.val());
+        });
+      });
+      return items;
     },
   }
 }
