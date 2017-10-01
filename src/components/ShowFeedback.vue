@@ -2,7 +2,7 @@
 .ShowFeedback
   .panel.panel-defalf
     .panel-heading
-      h3.sectionTitle Feedback Lists
+      h3.sectionTitle Feedback
     .panel-body
       table.table.table-striped
         thead
@@ -14,9 +14,9 @@
         tbody
           tr(v-for='feedback in feedbacks')
             td
-              | {{feedback.author}}
+              | {{ feedback.author }}
             td
-              | {{feedback.feedback}}
+              | {{ feedback.feedback }}
 </template>
 
 <script>
@@ -47,8 +47,13 @@ export default {
 .ShowFeedback
   text-align: center
   font-size: 18px
-  margin-top: 60px
   border-top: solid 1px rgba(#000, 0.2)
+  margin-top: 60px
+  margin-left: auto
+  margin-right: auto
+  width: 100%
+  max-width: 600px
+  min-width: 150px
 
 .sectionTitle
   margin-bottom: 30px

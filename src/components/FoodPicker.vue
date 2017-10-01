@@ -88,6 +88,7 @@ export default {
         foodList.innerHTML = '沒這個選項';
         clearInterval(this.timerId);
         this.$refs.stopBtn.click();
+        this.selected = false;
         return;
       }
 
