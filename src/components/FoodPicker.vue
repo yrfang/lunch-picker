@@ -24,19 +24,14 @@
             .slotTop
             .slotBody
       .slotButton
-        button.start(@click="clickStart", v-if="randomShow===false") STAR
+        button.start(@click="clickStart", v-if="randomShow===false && isReady") STAR
         button.stop(@click="clickStop", v-if="randomShow", ref="stopBtn") STOP
-    .row
-      ShowFeedback(v-if="randomShow===false")
 </template>
 
 <script>
-import ShowFeedback from './ShowFeedback';
-
 export default {
   name: 'foodPicker',
-  components: { ShowFeedback },
-  props: ['stores'],
+  props: ['stores', 'isReady'],
   data() {
       var _budgets = [
         { text: "0 ~ 100", low: 0, high: 100},
@@ -60,20 +55,17 @@ export default {
     }
   },
   computed: {
-    // a computed getter
     filteredStores: function() {
       return this.stores.filter(this.filterStore);
     }
   },
   methods: {
     filterStore(store) {
-      console.log(store.type, this.selectCatItem.type);
         return store.price >= this.selectBudgeItem.low &&
           store.price <= this.selectBudgeItem.high &&
           store.type == this.selectCatItem.type;
     },
     clickStart() {
-      //console.log(this.selectCatItem);
       const foodList = document.querySelector('.foodResult ul li');
       this.randomShow = true;
       this.timerId = setInterval(this.interValFunc, 100);
@@ -87,8 +79,8 @@ export default {
         text = randomFood.name;
       } else {
         foodList.innerHTML = '沒這個選項';
-        //var btn = this.$refs.stopBtn
-        //btn.click();
+        clearInterval(this.timerId);
+        this.$refs.stopBtn.click();
         return;
       }
 
@@ -100,17 +92,6 @@ export default {
     clickStop() {
       const foodList = document.querySelector('.foodResult ul li');
       this.randomShow = false;
-    },
-    mounted() {
-      function sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-      }
-
-      while (!filteredStores.length){
-        sleep(500).then(() => {
-          // fix init error
-      });
-      }
     }
   }
 }
