@@ -1,6 +1,6 @@
 <template lang="pug">
   .Homepage
-    AppNavBar
+    AppNavBar.navBar
     FoodPicker(:stores="stores")
 </template>
 
@@ -42,11 +42,11 @@ export default {
   },
   data() {
     return {
-      stores: this.getInitStoreData(),
+      stores: []
     }
   },
   mounted() {
-    // this.getInitStoreData();
+    this.stores = this.getInitStoreData();
   },
   methods: {
     getInitStoreData() {

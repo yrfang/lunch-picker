@@ -7,14 +7,13 @@
         label(for='budget') 💰 預算範圍
         select.form-control(v-model="selectBudgeItem")
           option(v-for="budget in budgets",
-                 v-bind:value="budget",
-                 ) {{ budget.text }}
+                 v-bind:value="budget") {{ budget.text }}
     .row
       .form-group#budgetSelect
         label(for='budget') 😋 種類
-        select.form-control
+        select.form-control(v-model="selectCatItem")
           option(v-for="category in categories",
-                 v-bind:value="category.value") {{ category.text }}
+                 v-bind:value="category") {{ category.text }}
     .row
       .slotMachine.outerContainer
         .innerContainer
@@ -26,12 +25,17 @@
             .slotBody
       .slotButton
         button.start(@click="clickStart", v-if="randomShow===false") STAR
-        button.stop(@click="clickStop", v-if="randomShow") STOP
+        button.stop(@click="clickStop", v-if="randomShow", ref="stopBtn") STOP
+    .row
+      ShowFeedback(v-if="randomShow===false")
 </template>
 
 <script>
+import ShowFeedback from './ShowFeedback';
+
 export default {
   name: 'foodPicker',
+  components: { ShowFeedback },
   props: ['stores'],
   data() {
       var _budgets = [
@@ -41,15 +45,18 @@ export default {
         { text: "200 up", low: 200, high: 1000},
       ];
 
+      var _categories = [
+        { text: "正餐", type: 'meal'},
+        { text: "飲料", type: 'drink'},
+      ];
+
     return {
       budgets: _budgets,
-      categories: [
-        { text: "正餐", value: 'meal'},
-        { text: "飲料", value: 'drink'},
-      ],
+      categories: _categories,
       randomShow: false,
       timerId: '',
-      selectBudgeItem: _budgets[0]
+      selectBudgeItem: _budgets[0],
+      selectCatItem: _categories[0]
     }
   },
   computed: {
@@ -60,30 +67,51 @@ export default {
   },
   methods: {
     filterStore(store) {
+      console.log(store.type, this.selectCatItem.type);
         return store.price >= this.selectBudgeItem.low &&
-          store.price <= this.selectBudgeItem.high;
+          store.price <= this.selectBudgeItem.high &&
+          store.type == this.selectCatItem.type;
     },
     clickStart() {
-      console.log(this.filteredStores);
+      //console.log(this.selectCatItem);
       const foodList = document.querySelector('.foodResult ul li');
-      const randomFood = this.filteredStores[Math.floor(Math.random() *
-      this.filteredStores.length)];
       this.randomShow = true;
       this.timerId = setInterval(this.interValFunc, 100);
     },
     interValFunc() {
       const foodList = document.querySelector('.foodResult ul li');
       const randomFood = this.filteredStores[Math.floor(Math.random() *
-      this.filteredStores.length)].name;
+      this.filteredStores.length)];
+      var text = '';
+      if(randomFood !== undefined) {
+        text = randomFood.name;
+      } else {
+        foodList.innerHTML = '沒這個選項';
+        //var btn = this.$refs.stopBtn
+        //btn.click();
+        return;
+      }
+
       if(!this.randomShow) {
         clearInterval(this.timerId);
       }
-      foodList.innerHTML = randomFood;
+      foodList.innerHTML = text;
     },
     clickStop() {
       const foodList = document.querySelector('.foodResult ul li');
       this.randomShow = false;
     },
+    mounted() {
+      function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      }
+
+      while (!filteredStores.length){
+        sleep(500).then(() => {
+          // fix init error
+      });
+      }
+    }
   }
 }
 </script>
@@ -91,8 +119,8 @@ export default {
 <style lang="sass" scoped>
 .FoodPicker
   position: relative
-  height: 150vh
   margin-top: 60px
+  margin-bottom: 60px
   overflow-x: hidden
   z-index: 0
   text-align: center

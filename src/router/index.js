@@ -1,10 +1,11 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+import Vue from 'vue';
+import Router from 'vue-router';
 
-import Homepage from '@/components/Homepage'
-import FoodPicker from '@/components/FoodPicker'
+import Homepage from '@/components/Homepage';
+// import FoodPicker from '@/components/FoodPicker';
+import Feedback from '@/components/Feedback';
 
-Vue.use(Router)
+Vue.use(Router);
 
 export default new Router({
   mode: 'history',
@@ -15,9 +16,9 @@ export default new Router({
       component: Homepage
     },
     {
-      path: '/picker',
-      name: 'foodPicker',
-      component: FoodPicker
+      path: '/feedback',
+      name: 'feedback',
+      component: Feedback
     }
   ]
 })
