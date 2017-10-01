@@ -26,11 +26,16 @@
       .slotButton
         button.start(@click="clickStart", v-if="randomShow===false && isReady") STAR
         button.stop(@click="clickStop", v-if="randomShow", ref="stopBtn") STOP
+    .row
+      ShowFeedback(v-if="selected")
 </template>
 
 <script>
+import ShowFeedback from './ShowFeedback';
+
 export default {
   name: 'foodPicker',
+  components: { ShowFeedback },
   props: ['stores', 'isReady'],
   data() {
       var _budgets = [
@@ -51,7 +56,8 @@ export default {
       randomShow: false,
       timerId: '',
       selectBudgeItem: _budgets[0],
-      selectCatItem: _categories[0]
+      selectCatItem: _categories[0],
+      selected: false,
     }
   },
   computed: {
@@ -68,6 +74,7 @@ export default {
     clickStart() {
       const foodList = document.querySelector('.foodResult ul li');
       this.randomShow = true;
+      this.selected = false;
       this.timerId = setInterval(this.interValFunc, 100);
     },
     interValFunc() {
@@ -92,6 +99,7 @@ export default {
     clickStop() {
       const foodList = document.querySelector('.foodResult ul li');
       this.randomShow = false;
+      this.selected = true;
     }
   }
 }
