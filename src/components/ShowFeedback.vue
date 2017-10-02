@@ -5,7 +5,7 @@
     .panel-body
       table.table.table-striped
         tbody
-          tr(v-for='record in records')
+          tr(v-for='record in currentNode')
             td
               | {{ record.name}}
             td
@@ -33,6 +33,15 @@ export default {
 
   computed: {
   },
+  
+  watch: {
+    'randomResult': function(newVal) {
+      console.log(newVal);
+      this.$bindAsArray('currentNode',
+        db.ref('records').orderByChild("storeName").equalTo(this.randomResult));
+      
+    }
+  },
 
   firebase: {
     records: db.ref('records').orderByChild("storeName").equalTo(this.randomResult || "肯德基")
@@ -40,22 +49,9 @@ export default {
 
   data() {
     return {
+      current: 'first',
+      currentNode: [],
       selectedItem: "",
-      feedbacks: [
-        {
-          author: 'ruby1',
-          feedback: 'good',
-        },
-        {
-          author: 'ruby2',
-          feedback: 'good',
-        },
-        {
-          author: 'ruby',
-          feedback: 'good',
-        },
-
-      ],
     }
   },
 }

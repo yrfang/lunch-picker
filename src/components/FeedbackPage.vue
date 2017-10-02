@@ -1,10 +1,9 @@
 <template lang="pug">
 .FeedbackPage
-  AppNavBar
   input.search.form-control(placeholder="search the store")
   .suggestions
-  Feedback
-  ShowFeedback
+  Feedback(:stores="stores")
+  ShowFeedback(:stores="stores")
 </template>
 
 <script>
@@ -13,7 +12,7 @@ import Feedback from './Feedback';
 import ShowFeedback from './ShowFeedback';
 
 export default {
-  name: 'feedback_home',
+  name: 'FeedbackPage',
   components: { AppNavBar, Feedback, ShowFeedback },
   props: ['stores'],
   data() {

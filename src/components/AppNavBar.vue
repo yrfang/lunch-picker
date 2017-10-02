@@ -13,7 +13,7 @@
         li
           a(@click="routeToAbout") About
         li
-          a(@click="routeToFeedback") Feedback
+          a(v-if="isAuth", @click="routeToFeedback") Feedback
         li.button(v-if="!isAuth", @click.prevent="signIn")
               a(href='/') Sign In
         li.button(v-if="isAuth", @click.prevent="signOut")
@@ -27,13 +27,17 @@
 <script>
 import Firebase from 'firebase';
 export default {
+  mounted(){
+    console.log(this.isAuth);
+  },
   props: ['auth', 'isAuth', 'userData'],
   methods: {
     routeToPicker() {
       this.$router.push('/');
     },
     routeToFeedback() {
-      this.$router.push('feedback');
+      this.$emit('feedback');
+      //this.$router.push('/feedback');
     },
     routeToAbout() {
       this.$router.push('/about');
@@ -43,9 +47,11 @@ export default {
       this.auth.signInWithPopup(provider);
     },
     signOut() {
+      console.log(this.isAuth);
       this.auth.signOut();
 
     },
+
   }
 }
 </script>

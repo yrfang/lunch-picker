@@ -99,9 +99,10 @@ export default {
 
       if(!this.randomShow) {
         clearInterval(this.timerId);
-        this.randomResult = document.querySelector('.foodResult ul li').firstChild.nodeValue;
       }
       foodList.innerHTML = text;
+      this.randomResult = text;
+
     },
     clickStop() {
       this.randomShow = false;

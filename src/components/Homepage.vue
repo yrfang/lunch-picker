@@ -1,14 +1,16 @@
 <template lang="pug">
   .Homepage
-    AppNavBar(
-      :auth="auth",:isAuth="isAuth",:userData="userData")
-    FoodPicker(:stores="stores", :isReady="isReady", :userData="userData")
-    FeedbackPage(:stores="stores", v-if="this.$route.path == '/feedback'")
+    AppNavBar(v-on:feedback="doFeedback",
+      :auth="auth",:isAuth="isAuth",:userData="userData",
+      :isPicker="isPicker")
+    FoodPicker(:stores="stores", :isReady="isReady", :userData="userData", v-if="isPicker")
+    FeedbackPage(:stores="stores",v-if="!isPicker")
 </template>
 
 <script>
 import Firebase from 'firebase';
 import AppNavBar from './AppNavBar';
+import FeedbackPage from './FeedbackPage';
 import FoodPicker from './FoodPicker';
 import {dbConfig} from '../config';
 
@@ -18,7 +20,7 @@ let storesRef = db.ref('stores');
 
 export default {
   name: 'homepage',
-  components: { AppNavBar, FoodPicker },
+  components: { AppNavBar, FoodPicker, FeedbackPage },
   //firebase: {
     //stores: storesRef,
   //},
@@ -29,6 +31,7 @@ export default {
       dbRef: db, //let other components access db
       isReady: false,
       isAuth: false,
+      isPicker: true,
       userData: {
         photoURL: "",
         displayName: "",
@@ -50,6 +53,9 @@ export default {
     });
   },
   methods: {
+    doFeedback(){
+      this.isPicker=false;
+    },
     getInitStoreData() {
       let items = [];
       let self = this;
