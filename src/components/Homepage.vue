@@ -1,7 +1,10 @@
 <template lang="pug">
   .Homepage
-    AppNavBar
-    FoodPicker(:stores="stores", :isReady="isReady")
+    AppNavBar(:navLocation="navLocation")
+    FoodPicker(@click="routeToHomepage",
+               :stores="stores",
+               :isReady="isReady")
+    FeedbackPage(v-if="this.$route.path == '/feedback'")
 </template>
 
 <script>
@@ -9,6 +12,7 @@ import Firebase from 'firebase';
 
 import AppNavBar from './AppNavBar';
 import FoodPicker from './FoodPicker';
+import FeedbackPage from './FeedbackPage';
 
 let config = {
   apiKey: "AIzaSyBEYcYW4zbye38aFfiRYiC25hKyp9-4WNc",
@@ -36,14 +40,15 @@ let storesRef = db.ref('stores');
 
 export default {
   name: 'homepage',
-  components: { AppNavBar, FoodPicker },
+  components: { AppNavBar, FoodPicker, FeedbackPage },
   firebase: {
     stores: storesRef,
   },
   data() {
     return {
       stores: [],
-      isReady: false
+      isReady: false,
+      navLocation: '',
     }
   },
   mounted() {
@@ -58,11 +63,14 @@ export default {
       storesRef.once('value', function(snap) {
         snap.forEach(function(storeSnap) {
           items.push(storeSnap.val());
-
         });
       self.isReady = true;
       });
       return items;
+    },
+    routeToHomepage() {
+      // this.navLocation = pathName;
+      this.$router.push('/');
     },
   },
 

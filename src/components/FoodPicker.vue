@@ -27,7 +27,8 @@
         button.start(@click="clickStart", v-if="randomShow===false && isReady") STAR
         button.stop(@click="clickStop", v-if="randomShow", ref="stopBtn") STOP
     .row
-      ShowFeedback(v-if="selected")
+      ShowFeedback(v-if="selected",
+                   :feedback_stores="stores")
 </template>
 
 <script>
@@ -61,7 +62,7 @@ export default {
     }
   },
   computed: {
-    filteredStores: function() {
+    filteredStores() {
       return this.stores.filter(this.filterStore);
     }
   },
@@ -185,7 +186,6 @@ export default {
     padding: 10px 40px
     border: solid 2px #333
     border-radius: 50px
-    // box-shadow: 5px 5px 0px yellow, 3px 3px 10px blue
 
     &:focus
       outline: none

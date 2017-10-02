@@ -11,29 +11,25 @@
     #navbar1.navbar-collapse.collapse
       ul.nav.navbar-nav
         li
-          a(href='/about') About
+          a(href='#') About
         li
-          a(href='/feedback') Feedback
-        li
-          a(href='/store') What's New
-        li.dropdown
-          a.dropdown-toggle(href='#', data-toggle='dropdown', role='button', aria-expanded='false')
-            | Login
-            span.caret
-          ul.dropdown-menu(role='menu')
-            li
-              a(href='#') Action
-            li
-              a(href='#') Another
-            li
-              a(href='#') Something
-            li.divider
-            li
-              a(href='#') Separated link
+          a(@click="routeToFeedback") Feedback
+          li
+            a(href='#') Login
 </template>
 
 <script>
 export default {
+  name: 'nav_bar',
+  props: [ 'navLocation' ],
+  methods: {
+    routeToPicker() {
+      this.$router.push('/');
+    },
+    routeToFeedback() {
+      this.$router.push('feedback');
+    },
+  },
 }
 </script>
 
@@ -69,4 +65,5 @@ nav
       font-size: 20px
       padding-left: 10px
       padding-right: 20px
+      cursor: pointer
 </style>

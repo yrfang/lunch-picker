@@ -1,9 +1,8 @@
 <template lang="pug">
 .Feedback
-  AppNavBar
   #feedbackForm.panel.panel-default
     .panel-heading
-      h3.sectionTitle 店名？？
+      h3.sectionTitle 店名？
     .panel-body
       form#form.form-inline(v-on:submit.prevent='addStore')
         .form-group
@@ -14,30 +13,11 @@
 </template>
 
 <script>
-import Firebase from 'firebase'
-
-import AppNavBar from './AppNavBar';
-
 export default {
   name: 'feedback',
-  components: { AppNavBar },
-  props: [],
+  // props: ['feedback_stores'],
   data() {
     return {
-      stores: [
-        {
-          author: 'ruby',
-          feedback: 'good',
-        },
-        {
-          author: 'ruby',
-          feedback: 'good',
-        },
-        {
-          author: 'ruby',
-          feedback: 'good',
-        },
-      ],
       newStore: {
           store: '',
           author: '',

@@ -5,12 +5,6 @@
       h3.sectionTitle Feedback
     .panel-body
       table.table.table-striped
-        thead
-          tr
-            th
-              | Author
-            th
-              | Feedback
         tbody
           tr(v-for='feedback in feedbacks')
             td
@@ -22,6 +16,7 @@
 <script>
 export default {
   name: 'show_feedback',
+  props: ['feedback_stores'],
   data() {
     return {
       feedbacks: [
