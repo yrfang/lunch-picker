@@ -1,9 +1,7 @@
 <template lang="pug">
   .Homepage
-    AppNavBar(:navLocation="navLocation")
-    FoodPicker(@click="routeToHomepage",
-               :stores="stores",
-               :isReady="isReady")
+    AppNavBar(:auth="auth",:isAuth="isAuth")
+    FoodPicker(:stores="stores", :isReady="isReady")
     FeedbackPage(v-if="this.$route.path == '/feedback'")
 </template>
 
@@ -12,7 +10,6 @@ import Firebase from 'firebase';
 
 import AppNavBar from './AppNavBar';
 import FoodPicker from './FoodPicker';
-import FeedbackPage from './FeedbackPage';
 
 let config = {
   apiKey: "AIzaSyBEYcYW4zbye38aFfiRYiC25hKyp9-4WNc",
@@ -23,54 +20,58 @@ let config = {
   messagingSenderId: "229539569797"
 };
 let app = Firebase.initializeApp(config);
-//let authRef = Firebase.auth();
-//authRef.onAuthStateChanged(onAuthStateChanged);
 let db = app.database();
+let authRef = Firebase.auth();
 
-Firebase.auth().onAuthStateChanged((user) => {
-  if(user) {
-    console.log("auth changed");
+//Firebase.auth().onAuthStateChanged((user) => {
+//  if(user) {
+//    console.log("User has signed in");
     //this.$router.push('/')
-  } else {
-    //this.$router.push('/')
-  }
-});
+//  } else {
+//    console.log("User signed out");
+//  }
+//});
 
 let storesRef = db.ref('stores');
 
 export default {
   name: 'homepage',
-  components: { AppNavBar, FoodPicker, FeedbackPage },
+  components: { AppNavBar, FoodPicker },
   firebase: {
     stores: storesRef,
   },
   data() {
     return {
+      auth: authRef,
       stores: [],
       isReady: false,
-      navLocation: '',
+      isAuth: false
     }
   },
   mounted() {
     this.stores = this.getInitStoreData();
-
+    Firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        console.log("User has signed in");
+        this.isAuth = true;
+      } else {
+        console.log("User signed out");
+        this.isAuth = false;
+      }
+    });
   },
   methods: {
     getInitStoreData() {
-
       let items = [];
       let self = this;
       storesRef.once('value', function(snap) {
         snap.forEach(function(storeSnap) {
           items.push(storeSnap.val());
+
         });
       self.isReady = true;
       });
       return items;
-    },
-    routeToHomepage() {
-      // this.navLocation = pathName;
-      this.$router.push('/');
     },
   },
 

@@ -11,17 +11,19 @@
     #navbar1.navbar-collapse.collapse
       ul.nav.navbar-nav
         li
-          a(href='#') About
+          a(@click="routeToAbout") About
         li
           a(@click="routeToFeedback") Feedback
-          li
-            a(href='#') Login
+        li.button(v-if="!isAuth", @click.prevent="signIn")
+          a(href='/') Sign In
+        li.button(v-if="isAuth", @click.prevent="signOut")
+          a(href='/') Sign Out
 </template>
 
 <script>
+import Firebase from 'firebase';
 export default {
-  name: 'nav_bar',
-  props: [ 'navLocation' ],
+  props: ['auth', 'isAuth'],
   methods: {
     routeToPicker() {
       this.$router.push('/');
@@ -29,7 +31,17 @@ export default {
     routeToFeedback() {
       this.$router.push('feedback');
     },
-  },
+    routeToAbout() {
+      this.$router.push('/about');
+    },
+    signIn() {
+      var provider = new Firebase.auth.GoogleAuthProvider();
+      this.auth.signInWithPopup(provider);
+    },
+    signOut() {
+      this.auth.signOut();
+    },
+  }
 }
 </script>
 
