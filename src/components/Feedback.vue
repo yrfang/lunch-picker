@@ -15,7 +15,6 @@
 <script>
 export default {
   name: 'feedback',
-  // props: ['feedback_stores'],
   data() {
     return {
       newStore: {

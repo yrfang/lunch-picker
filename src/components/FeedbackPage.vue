@@ -4,17 +4,18 @@
   input.search.form-control(placeholder="search the store")
   .suggestions
   Feedback
-  ul
-    li(v-for="num in 5") {{ num }}
+  ShowFeedback
 </template>
 
 <script>
 import AppNavBar from './AppNavBar';
 import Feedback from './Feedback';
+import ShowFeedback from './ShowFeedback';
 
 export default {
   name: 'feedback_home',
-  components: { AppNavBar, Feedback },
+  components: { AppNavBar, Feedback, ShowFeedback },
+  props: ['stores'],
   data() {
     return {
     }

@@ -2,7 +2,7 @@
   .Homepage
     AppNavBar(
       :auth="auth",:isAuth="isAuth",:userData="userData")
-    FoodPicker(:stores="stores", :isReady="isReady", :dbRef="dbRef")
+    FoodPicker(:stores="stores", :isReady="isReady", :userData="userData")
     FeedbackPage(:stores="stores", v-if="this.$route.path == '/feedback'")
 </template>
 

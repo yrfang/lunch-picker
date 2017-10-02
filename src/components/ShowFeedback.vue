@@ -1,8 +1,7 @@
 <template lang="pug">
 .ShowFeedback
   .panel.panel-defalf
-    .panel-heading
-      h3.sectionTitle Feedback
+    .panel-heading 評論
     .panel-body
       table.table.table-striped
         tbody
@@ -22,10 +21,10 @@ let db = app.database();
 
 export default {
   name: 'showFeedback',
-  props: ['feedbackStores', 'randomResult'],
+  props: ['userData','randomResult'],
   mounted() {
   },
-  
+
   methods: {
     filterStoreById(store) {
       return true;
@@ -55,7 +54,7 @@ export default {
           author: 'ruby',
           feedback: 'good',
         },
-        
+
       ],
     }
   },
