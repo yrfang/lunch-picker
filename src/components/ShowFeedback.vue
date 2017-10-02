@@ -6,32 +6,56 @@
     .panel-body
       table.table.table-striped
         tbody
-          tr(v-for='feedback in feedbacks')
+          tr(v-for='record in records')
             td
-              | {{ feedback.author }}
+              | {{ record.name}}
             td
-              | {{ feedback.feedback }}
+              | {{ record.content}}
 </template>
 
 <script>
+import Firebase from 'firebase';
+import {dbConfig} from '../config';
+
+let app = Firebase.initializeApp(dbConfig, "feedbackApp");
+let db = app.database();
+
 export default {
-  name: 'show_feedback',
-  props: ['feedback_stores'],
+  name: 'showFeedback',
+  props: ['feedbackStores', 'randomResult'],
+  mounted() {
+  },
+  
+  methods: {
+    filterStoreById(store) {
+      return true;
+    },
+  },
+
+  computed: {
+  },
+
+  firebase: {
+    records: db.ref('records').orderByChild("storeName").equalTo(this.randomResult || "肯德基")
+  },
+
   data() {
     return {
+      selectedItem: "",
       feedbacks: [
         {
-          author: 'ruby',
+          author: 'ruby1',
+          feedback: 'good',
+        },
+        {
+          author: 'ruby2',
           feedback: 'good',
         },
         {
           author: 'ruby',
           feedback: 'good',
         },
-        {
-          author: 'ruby',
-          feedback: 'good',
-        },
+        
       ],
     }
   },

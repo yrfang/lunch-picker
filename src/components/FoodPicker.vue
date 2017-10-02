@@ -28,7 +28,7 @@
         button.stop(@click="clickStop", v-if="randomShow", ref="stopBtn") STOP
     .row
       ShowFeedback(v-if="selected",
-                   :feedback_stores="stores")
+                   :feedbackStores="stores", :randomResult="randomResult")
 </template>
 
 <script>
@@ -37,7 +37,10 @@ import ShowFeedback from './ShowFeedback';
 export default {
   name: 'foodPicker',
   components: { ShowFeedback },
-  props: ['stores', 'isReady'],
+  props: ['stores', 'isReady', 'dbRef'],
+  mounted() {
+    //console.log(this.recordsRef);
+  },
   data() {
       var _budgets = [
         { text: "0 ~ 100", low: 0, high: 100},
@@ -59,6 +62,7 @@ export default {
       selectBudgeItem: _budgets[0],
       selectCatItem: _categories[0],
       selected: false,
+      randomResult: ""
     }
   },
   computed: {
@@ -95,11 +99,11 @@ export default {
 
       if(!this.randomShow) {
         clearInterval(this.timerId);
+        this.randomResult = document.querySelector('.foodResult ul li').firstChild.nodeValue;
       }
       foodList.innerHTML = text;
     },
     clickStop() {
-      const foodList = document.querySelector('.foodResult ul li');
       this.randomShow = false;
       this.selected = true;
     }

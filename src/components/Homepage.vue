@@ -1,51 +1,38 @@
 <template lang="pug">
   .Homepage
-    AppNavBar(:auth="auth",:isAuth="isAuth")
-    FoodPicker(:stores="stores", :isReady="isReady")
-    FeedbackPage(v-if="this.$route.path == '/feedback'")
+    AppNavBar(
+      :auth="auth",:isAuth="isAuth",:userData="userData")
+    FoodPicker(:stores="stores", :isReady="isReady", :dbRef="dbRef")
+    FeedbackPage(:stores="stores", v-if="this.$route.path == '/feedback'")
 </template>
 
 <script>
 import Firebase from 'firebase';
-
 import AppNavBar from './AppNavBar';
 import FoodPicker from './FoodPicker';
+import {dbConfig} from '../config';
 
-let config = {
-  apiKey: "AIzaSyBEYcYW4zbye38aFfiRYiC25hKyp9-4WNc",
-  authDomain: "whattoeat-f36a5.firebaseapp.com",
-  databaseURL: "https://whattoeat-f36a5.firebaseio.com",
-  projectId: "whattoeat-f36a5",
-  storageBucket: "whattoeat-f36a5.appspot.com",
-  messagingSenderId: "229539569797"
-};
-let app = Firebase.initializeApp(config);
+let app = Firebase.initializeApp(dbConfig);
 let db = app.database();
-let authRef = Firebase.auth();
-
-//Firebase.auth().onAuthStateChanged((user) => {
-//  if(user) {
-//    console.log("User has signed in");
-    //this.$router.push('/')
-//  } else {
-//    console.log("User signed out");
-//  }
-//});
-
 let storesRef = db.ref('stores');
 
 export default {
   name: 'homepage',
   components: { AppNavBar, FoodPicker },
-  firebase: {
-    stores: storesRef,
-  },
+  //firebase: {
+    //stores: storesRef,
+  //},
   data() {
     return {
-      auth: authRef,
+      auth: Firebase.auth(),
       stores: [],
+      dbRef: db, //let other components access db
       isReady: false,
-      isAuth: false
+      isAuth: false,
+      userData: {
+        photoURL: "",
+        displayName: "",
+      },
     }
   },
   mounted() {
@@ -54,6 +41,8 @@ export default {
       if (user) {
         console.log("User has signed in");
         this.isAuth = true;
+        this.userData.photoURL = user.photoURL;
+        this.userData.displayName = user.displayName;
       } else {
         console.log("User signed out");
         this.isAuth = false;
@@ -67,7 +56,6 @@ export default {
       storesRef.once('value', function(snap) {
         snap.forEach(function(storeSnap) {
           items.push(storeSnap.val());
-
         });
       self.isReady = true;
       });

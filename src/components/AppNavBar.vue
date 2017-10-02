@@ -15,15 +15,19 @@
         li
           a(@click="routeToFeedback") Feedback
         li.button(v-if="!isAuth", @click.prevent="signIn")
-          a(href='/') Sign In
+              a(href='/') Sign In
         li.button(v-if="isAuth", @click.prevent="signOut")
-          a(href='/') Sign Out
+              a(href='/') Sign Out
+        li
+          #user-pic(v-if="isAuth", v-bind:style="{backgroundImage: 'url(' + userData.photoURL + ')'}")
+        li
+          #user-name(v-if="isAuth", v-bind:value="userData.displayName ") {{ userData.displayName }}
 </template>
 
 <script>
 import Firebase from 'firebase';
 export default {
-  props: ['auth', 'isAuth'],
+  props: ['auth', 'isAuth', 'userData'],
   methods: {
     routeToPicker() {
       this.$router.push('/');
@@ -40,6 +44,7 @@ export default {
     },
     signOut() {
       this.auth.signOut();
+      
     },
   }
 }
@@ -78,4 +83,27 @@ nav
       padding-left: 10px
       padding-right: 20px
       cursor: pointer
+
+      #user-pic
+        top: 5px;
+        position: relative;
+        display: inline-block;
+        background-image: url('/assets/images/profile_placeholder.png');
+        background-repeat: no-repeat;
+        width: 40px;
+        height: 40px;
+        background-size: 40px;
+        border-radius: 20px;
+
+      #user-name
+        top: 5px;
+        left: -40px;
+        position: relative;
+        font-size: 12px;
+        line-height: 36px;
+        padding-right: 10px;
+        padding-left: 20px;
+
+
+
 </style>
