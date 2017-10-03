@@ -5,53 +5,29 @@
     .panel-body
       table.table.table-striped
         tbody
-          tr(v-for='record in currentNode')
+          tr(v-for='record in records')
             td
               | {{ record.name}}
             td
               | {{ record.content}}
 </template>
-
 <script>
-import Firebase from 'firebase';
-import {dbConfig} from '../config';
-
-let app = Firebase.initializeApp(dbConfig, "feedbackApp");
-let db = app.database();
-
 export default {
   name: 'showFeedback',
-  props: ['userData','randomResult'],
-  mounted() {
-  },
-
-  methods: {
-    filterStoreById(store) {
-      return true;
-    },
-  },
-
-  computed: {
-  },
-  
-  watch: {
-    'randomResult': function(newVal) {
-      console.log(newVal);
-      this.$bindAsArray('currentNode',
-        db.ref('records').orderByChild("storeName").equalTo(this.randomResult));
-      
+  props: ['userData','selectedStore', 'recordsRef'],
+  watch: {  
+    'selectedStore': function(newVal) {
+      this.$bindAsArray('records',
+        this.recordsRef.orderByChild("storeName").equalTo(newVal));
     }
   },
-
-  firebase: {
-    records: db.ref('records').orderByChild("storeName").equalTo(this.randomResult || "肯德基")
+  mounted() {
+    this.$bindAsArray('records',
+    this.recordsRef.orderByChild("storeName").equalTo(this.selectedStore));
   },
-
   data() {
     return {
-      current: 'first',
-      currentNode: [],
-      selectedItem: "",
+      records: []
     }
   },
 }

@@ -3,8 +3,8 @@
     AppNavBar(v-on:feedback="doFeedback",
       :auth="auth",:isAuth="isAuth",:userData="userData",
       :isPicker="isPicker")
-    FoodPicker(:stores="stores", :isReady="isReady", :userData="userData", v-if="isPicker")
-    FeedbackPage(:stores="stores",v-if="!isPicker")
+    FoodPicker(:stores="stores", :recordsRef="recordsRef", :isReady="isReady", :userData="userData", v-if="isPicker")
+    FeedbackPage(:recordsRef="recordsRef", :stores="stores",v-if="!isPicker", :userData="userData")
 </template>
 
 <script>
@@ -21,14 +21,10 @@ let storesRef = db.ref('stores');
 export default {
   name: 'homepage',
   components: { AppNavBar, FoodPicker, FeedbackPage },
-  //firebase: {
-    //stores: storesRef,
-  //},
   data() {
     return {
       auth: Firebase.auth(),
       stores: [],
-      dbRef: db, //let other components access db
       isReady: false,
       isAuth: false,
       isPicker: true,
@@ -36,6 +32,7 @@ export default {
         photoURL: "",
         displayName: "",
       },
+      recordsRef: db.ref('records') //for ShowFeedback
     }
   },
   mounted() {

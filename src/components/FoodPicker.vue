@@ -27,8 +27,8 @@
         button.start(@click="clickStart", v-if="randomShow===false && isReady") STAR
         button.stop(@click="clickStop", v-if="randomShow", ref="stopBtn") STOP
     .row
-      ShowFeedback(v-if="selected",
-                   :feedbackStores="stores", :randomResult="randomResult")
+      ShowFeedback(v-if="selected", :recordsRef="recordsRef",
+                   :feedbackStores="stores", :selectedStore="randomResult")
 </template>
 
 <script>
@@ -37,9 +37,8 @@ import ShowFeedback from './ShowFeedback';
 export default {
   name: 'foodPicker',
   components: { ShowFeedback },
-  props: ['stores', 'isReady', 'dbRef'],
+  props: ['stores', 'isReady', "recordsRef"],
   mounted() {
-    //console.log(this.recordsRef);
   },
   data() {
       var _budgets = [

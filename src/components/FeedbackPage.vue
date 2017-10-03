@@ -6,24 +6,32 @@
       li(v-for="store in filteredStoresName",
          v-model="selectedStore")
         a(@click="dispalySelectedStore") {{store.name}}
-  Feedback(:stores="stores", :selectedStore="selectedStore", :filterShow="filterShow", v-if="filterShow")
-  ShowFeedback(:stores="stores", v-if="filterShow")
+  Feedback(:userData="userData", :recordsRef="recordsRef", :stores="stores", :selectedStore="selectedStore", :filterShow="filterShow", v-if="filterShow")
+  ShowFeedback(:stores="stores", :recordsRef="recordsRef", :selectedStore="selectedStore", v-if="filterShow")
 </template>
 
 <script>
 import AppNavBar from './AppNavBar';
 import Feedback from './Feedback';
 import ShowFeedback from './ShowFeedback';
+import Firebase from 'firebase';
+import {dbConfig} from '../config';
+
+let app = Firebase.initializeApp(dbConfig, "feedbackApp");
+let db = app.database();
 
 export default {
   name: 'FeedbackPage',
   components: { AppNavBar, Feedback, ShowFeedback },
-  props: ['stores'],
+  props: ['stores', 'userData', 'recordsRef'],
+  mounted() {
+  },
   data() {
     return {
       searchString: '',
       filterShow: false,
-      selectedStore: ''
+      selectedStore: '',
+      currentNode: [],
     }
   },
   computed: {
@@ -36,9 +44,8 @@ export default {
       return store.name.toLowerCase().indexOf(this.searchString.trim().toLowerCase()) !== -1;
     },
     dispalySelectedStore(event) {
-      this.selectedStore = event.target.innerHTML;
       this.filterShow = true;
-
+      this.selectedStore = event.target.innerHTML;
     },
   },
 }

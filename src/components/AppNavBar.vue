@@ -28,7 +28,6 @@
 import Firebase from 'firebase';
 export default {
   mounted(){
-    console.log(this.isAuth);
   },
   props: ['auth', 'isAuth', 'userData'],
   methods: {
@@ -37,7 +36,6 @@ export default {
     },
     routeToFeedback() {
       this.$emit('feedback');
-      //this.$router.push('/feedback');
     },
     routeToAbout() {
       this.$router.push('/about');
@@ -47,11 +45,8 @@ export default {
       this.auth.signInWithPopup(provider);
     },
     signOut() {
-      console.log(this.isAuth);
       this.auth.signOut();
-
     },
-
   }
 }
 </script>

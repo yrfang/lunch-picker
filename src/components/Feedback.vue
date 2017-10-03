@@ -4,30 +4,35 @@
     .panel-heading
       h4.sectionTitle {{ filterShow ? selectedStore : '店名' }}
     .panel-body
-      form#form.form-inline(v-on:submit.prevent='addStore')
+      form#form.form-inline(v-on:submit.prevent='addComment')
         .form-group
-          input#storeAuthor.form-control(type='text')
-        .form-group
-          input#storeFeedback.form-control(type='text')
-        input.btn.btn-primary#submit(type='submit', value='Add Feedback')
+          textarea#storeFeedback.form-control(v-model="newComment.content", type='text')
+        input.btn.btn-primary#submit(type='submit', value='AddFeedback')
 </template>
 
 <script>
 export default {
   name: 'feedback',
-  props: ['selectedStore', 'filterShow'],
+  props: ['selectedStore', 'filterShow', 'userData', 'recordsRef'],
   data() {
     return {
-      newStore: {
-          store: '',
-          author: '',
-          feedback: ''
+      newComment: {
+          content: '',
+          name: this.userData.displayName,
+          photoURL: this.userData.photoURL,
+          storeName: this.selectedStore
       },
     }
   },
-  methods: {
-    addStore() {
+  watch: {
+    'selectedStore': function(newVal) {
+      this.newComment.storeName = newVal;
+    }
+  },
 
+  methods: {
+    addComment() {
+      this.recordsRef.push(this.newComment);
     },
   }
 }
@@ -60,6 +65,13 @@ export default {
       margin-right: 10px
       padding: 5px 10px
       font-size: 18px
+      text-align: left
+    textarea
+      max-width: 550px
+      min-width: 100px
+      margin-right: 10px
+      padding: 5px 10px
+      font-size: 16px
       text-align: left
     #storeAuthor
       width: 100px
