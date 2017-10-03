@@ -2,19 +2,20 @@
 .Feedback
   #feedbackForm.panel.panel-default
     .panel-heading
-      h3.sectionTitle 店名？
+      h4.sectionTitle {{ filterShow ? selectedStore : '店名' }}
     .panel-body
       form#form.form-inline(v-on:submit.prevent='addStore')
         .form-group
           input#storeAuthor.form-control(type='text')
         .form-group
           input#storeFeedback.form-control(type='text')
-        input.btn.btn-primary(type='submit', value='Add Feedback')
+        input.btn.btn-primary#submit(type='submit', value='Add Feedback')
 </template>
 
 <script>
 export default {
   name: 'feedback',
+  props: ['selectedStore', 'filterShow'],
   data() {
     return {
       newStore: {
@@ -42,10 +43,10 @@ export default {
   text-align: center
 
 .sectionTitle
-  margin-bottom: 30px
+  margin-bottom: 10px
   font-weight: bold
   color: #507bb4
-  font-size: 36px
+  font-size: 24px
 
 #feedbackForm
   margin-left: auto
@@ -67,7 +68,11 @@ export default {
   .Feedback
     text-align: center
     margin-top: 30px
-
   .sectionTitle
     font-size: 28px
+  #feedbackForm
+    #form
+      input
+        margin-left: auto
+        margin-right: auto
 </style>
