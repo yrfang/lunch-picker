@@ -11,8 +11,6 @@
     #navbar1.navbar-collapse.collapse
       ul.nav.navbar-nav
         li
-          a(@click="routeToAbout") About
-        li
           a(v-if="isAuth", @click="routeToFeedback") Feedback
         li.button(v-if="!isAuth", @click.prevent="signIn")
               a(href='/') Sign In
